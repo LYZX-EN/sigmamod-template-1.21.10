@@ -15,6 +15,8 @@ public class SigmaMod implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+
+    boolean onfalldmg = false;
     @Override
     public void onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -23,13 +25,18 @@ public class SigmaMod implements ModInitializer {
 
         ServerLivingEntityEvents.ALLOW_DAMAGE.register((livingEntity, damageSource, v) -> {
             if (damageSource.isOf(DamageTypes.FALL) && livingEntity.isPlayer()) {
-                livingEntity.kill(null);
+                livingEntity.setHealth(0.0f);
+                onfalldmg = true;
             }
             return true;
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((original, newPlayer, b) -> {
-            newPlayer.changeGameMode(GameMode.SPECTATOR);
+            if (onfalldmg) {
+                newPlayer.changeGameMode(GameMode.SPECTATOR);
+            }
+
+            onfalldmg = false;
         });
     }
 }
