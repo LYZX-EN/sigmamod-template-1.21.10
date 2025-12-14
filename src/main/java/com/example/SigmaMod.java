@@ -35,8 +35,6 @@ public class SigmaMod implements ModInitializer {
             if (onfalldmg) {
                 newPlayer.changeGameMode(GameMode.SPECTATOR);
             }
-
-            onfalldmg = false;
         });
     }
 }
